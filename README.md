@@ -17,10 +17,34 @@ A command-line utility to download podcast episodes from RSS feeds with proper n
 
 ## Installation
 
-### Install globally via npm:
+This package is published to both npmjs.org and GitHub Packages.
+
+### Option 1: Install from npmjs.org (Recommended - No auth required)
 
 ```bash
 npm install -g pullapod
+```
+
+### Option 2: Install from GitHub Packages
+
+First, configure npm to use GitHub Packages for the `@lwndev` scope.
+
+Create or edit `~/.npmrc` and add:
+
+```
+@lwndev:registry=https://npm.pkg.github.com
+//npm.pkg.github.com/:_authToken=YOUR_GITHUB_TOKEN
+```
+
+To create a GitHub token:
+1. Go to GitHub Settings → Developer settings → Personal access tokens → Tokens (classic)
+2. Generate a new token with `read:packages` scope
+3. Copy the token and replace `YOUR_GITHUB_TOKEN` above
+
+Then install:
+
+```bash
+npm install -g @lwndev/pullapod
 ```
 
 ### Or install locally for development:
