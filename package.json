@@ -1,6 +1,6 @@
 {
   "name": "pullapod",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Pull a Pod - A command-line utility to download podcast episodes from RSS feeds",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
