@@ -1,0 +1,56 @@
+# GitHub Dependabot configuration for automated dependency updates and security scanning
+# Documentation: https://docs.github.com/en/code-security/dependabot
+
+version: 2
+updates:
+  # Monitor npm dependencies
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+    # Automatically create pull requests for security updates
+    open-pull-requests-limit: 10
+    # Group dependency updates
+    groups:
+      # Group all development dependencies together
+      development-dependencies:
+        dependency-type: "development"
+        update-types:
+          - "minor"
+          - "patch"
+      # Group production dependencies by type
+      production-dependencies:
+        dependency-type: "production"
+        update-types:
+          - "patch"
+    # Additional security options
+    versioning-strategy: increase
+    # Add labels to PRs for easy filtering
+    labels:
+      - "dependencies"
+      - "automated"
+    # Add reviewers (optional - uncomment and add GitHub usernames)
+    # reviewers:
+    #   - "YOUR_USERNAME"
+    # Add assignees (optional - uncomment and add GitHub usernames)
+    # assignees:
+    #   - "YOUR_USERNAME"
+    # Commit message preferences
+    commit-message:
+      prefix: "chore"
+      prefix-development: "chore(dev)"
+      include: "scope"
+
+  # Monitor GitHub Actions (if you add workflows later)
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+    labels:
+      - "github-actions"
+      - "dependencies"
+      - "automated"
