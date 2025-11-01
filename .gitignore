@@ -1,0 +1,40 @@
+# Dependencies
+node_modules/
+
+# Agentic Tools
+.claude/
+.cursor/
+
+# Build output
+dist/
+
+# TypeScript cache
+*.tsbuildinfo
+
+# Environment variables
+.env
+.env.local
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+npm-debug.log*
+
+# Test downloads
+test-downloads/
+downloads/
+
+# Test artifacts
+coverage/
+tests/test-*/
+*.test.js
+*.test.js.map
