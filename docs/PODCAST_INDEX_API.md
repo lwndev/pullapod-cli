@@ -7,6 +7,7 @@ This document provides comprehensive information about using the Podcast Index A
 - [Overview](#overview)
 - [Getting Started](#getting-started)
 - [Authentication](#authentication)
+- [Response Format](#response-format)
 - [API Methods](#api-methods)
   - [Search](#search)
   - [Podcasts](#podcasts)
@@ -16,6 +17,10 @@ This document provides comprehensive information about using the Podcast Index A
   - [Hub & Add](#hub--add)
 - [Error Handling](#error-handling)
 - [Examples](#examples)
+- [API Rate Limits](#api-rate-limits)
+- [Unimplemented API Methods](#unimplemented-api-methods)
+- [Additional Resources](#additional-resources)
+- [Support](#support)
 
 ## Overview
 
@@ -88,10 +93,35 @@ The Podcast Index API uses **Amazon-style request authorization** with SHA-1 has
 
 - `User-Agent`: Application identifier (e.g., "pullapod/1.0")
 - `X-Auth-Key`: Your API key
-- `X-Auth-Date`: Current UTC unix timestamp (must be within 3 minutes)
+- `X-Auth-Date`: Current UTC unix timestamp
 - `Authorization`: SHA-1 hash of `apiKey + apiSecret + timestamp`
 
 The authentication is handled automatically by the client - you don't need to manage these headers manually.
+
+**Note:** All methods implemented in this client require authentication. While some endpoints in the Podcast Index API (like `/value/*` endpoints) don't require authentication, those endpoints are not currently implemented in this client.
+
+## Response Format
+
+All API methods return a `PodcastIndexResponse` object with the following structure:
+
+```typescript
+interface PodcastIndexResponse<T> {
+  status: string;           // Status of the request (e.g., "true")
+  feeds?: T[];             // Array of podcast feeds (for podcast queries)
+  items?: T[];             // Array of episodes (for episode queries)
+  episodes?: T[];          // Array of episodes (used by some endpoints like random episodes)
+  feed?: T;                // Single feed object (for single podcast queries)
+  count?: number;          // Number of results returned
+  query?: string;          // The original query string
+  description?: string;    // Description or status message
+}
+```
+
+The response structure varies by endpoint:
+- **Search methods** (`searchByTerm`, `searchByTitle`) return `feeds` array
+- **Episode methods** (`getEpisodesByFeedId`, `getRecentEpisodes`) return `items` array
+- **Random episodes** (`getRandomEpisodes`) returns `episodes` array
+- **Single item queries** (`getPodcastById`, `getEpisodeById`) return `feed` or similar single object
 
 ## API Methods
 
@@ -105,7 +135,7 @@ Search for podcasts by term (searches title, author, description).
 const results = await client.searchByTerm({
   q: 'javascript',      // Required: search query
   max: 10,              // Optional: max results (1-1000, default: 10)
-  val: 'lightning',     // Optional: only feeds with value block
+  val: 'lightning',     // Optional: only feeds with value block (e.g., 'lightning' for Lightning payments)
   aponly: true,         // Optional: Podcast Index sourced only
   clean: false,         // Optional: family-friendly only
   fulltext: true,       // Optional: return full descriptions
@@ -267,7 +297,9 @@ const recentFeeds = await client.getRecentFeeds({
 
 #### getNewFeeds(params)
 
-Get newly added podcast feeds (alias for getRecentFeeds with different endpoint).
+Get newly added podcast feeds using the `/recent/newfeeds` endpoint.
+
+**Note:** This uses a different endpoint than `getRecentFeeds()` (which uses `/recent/feeds`). While both return recently added feeds, they may have slightly different behaviors or filtering. Consult the [official API documentation](https://podcastindex-org.github.io/docs-api/) for specific differences.
 
 ```typescript
 const newFeeds = await client.getNewFeeds({
@@ -304,6 +336,8 @@ categories.feeds.forEach(cat => {
 #### notifyFeedUpdate(feedUrl)
 
 Notify the index that a podcast feed has been updated.
+
+**Note:** This endpoint does not require authentication according to the Podcast Index API specification, but the client includes authentication headers for consistency.
 
 ```typescript
 await client.notifyFeedUpdate('https://feeds.example.com/podcast.xml');
@@ -459,6 +493,41 @@ The Podcast Index API has rate limits to ensure fair usage. If you exceed the ra
 - Implement exponential backoff for retries
 - Use appropriate `max` parameters to limit result sizes
 - Consider the `since` parameter to fetch only new data
+
+## Unimplemented API Methods
+
+The Podcast Index API offers additional endpoints that are not currently implemented in this client. If you need these endpoints, please open an issue or submit a pull request:
+
+### Search Endpoints
+- `/search/byperson` - Search podcasts by person name
+- `/search/music/byterm` - Search music podcasts by term
+
+### Podcast Endpoints
+- `/podcasts/bytag` - Get podcasts by value tag (e.g., podcast:value, podcast:valueTimeSplit)
+- `/podcasts/bymedium` - Get podcasts by medium (e.g., podcast, music, video, film, audiobook)
+- `/podcasts/dead` - Get list of dead/defunct feeds
+- `/podcasts/batch/byguid` - Get multiple podcasts by GUID in a single request
+
+### Episode Endpoints
+- `/episodes/bypodcastguid` - Get episodes by podcast GUID
+- `/episodes/byitunesid` - Get episodes by iTunes ID
+- `/episodes/live` - Get currently live episodes
+
+### Recent Endpoints
+- `/recent/newvaluefeeds` - Get recently added feeds with value blocks
+- `/recent/data` - Get recent feed changes (updates, deletes, etc.)
+- `/recent/soundbites` - Get recent soundbite clips
+
+### Value4Value Endpoints
+- `/value/byfeedid` - Get value block by feed ID
+- `/value/byfeedurl` - Get value block by feed URL
+- `/value/bypodcastguid` - Get value block by podcast GUID
+- `/value/byepisodeguid` - Get value block by episode GUID
+
+### Additional Add Methods
+- `/add/byitunesid` - Add feed to index by iTunes ID
+
+For complete API documentation, see the [official Podcast Index API docs](https://podcastindex-org.github.io/docs-api/).
 
 ## Additional Resources
 
