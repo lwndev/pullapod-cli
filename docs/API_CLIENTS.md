@@ -94,28 +94,55 @@ Full implementation of the [Podcast Index API](https://podcastindex-org.github.i
 - Access statistics and categories
 - Notify feed updates and add new feeds
 
-**Setup:**
+**Setup Option 1: Using .env file (Recommended):**
+
+1. Copy `.env.example` to `.env`:
+   ```bash
+   cp .env.example .env
+   ```
+
+2. Edit `.env` and add your credentials:
+   ```bash
+   PODCAST_INDEX_API_KEY=your-api-key-here
+   PODCAST_INDEX_API_SECRET=your-api-secret-here
+   ```
+
+3. Use in code:
+   ```typescript
+   import { PodcastIndexClient } from './clients';
+   import { loadPodcastIndexConfig, loadEnvFile } from './config';
+
+   // Load .env file
+   loadEnvFile();
+
+   // Load configuration and create client
+   const config = loadPodcastIndexConfig();
+   const client = new PodcastIndexClient(config);
+
+   // Search for podcasts
+   const results = await client.searchByTerm({ q: 'javascript', max: 10 });
+
+   // Get trending
+   const trending = await client.getTrending({ lang: 'en', max: 20 });
+
+   // Get episodes
+   const episodes = await client.getEpisodesByFeedId({ id: 920666, max: 50 });
+   ```
+
+**Setup Option 2: Using environment variables directly:**
+
 ```bash
 export PODCAST_INDEX_API_KEY="your-key"
 export PODCAST_INDEX_API_SECRET="your-secret"
 ```
 
-**Usage:**
+Then use without calling `loadEnvFile()`:
 ```typescript
 import { PodcastIndexClient } from './clients';
 import { loadPodcastIndexConfig } from './config';
 
-const config = loadPodcastIndexConfig();
-const client = new PodcastIndexClient(config);
-
-// Search for podcasts
+const client = new PodcastIndexClient(loadPodcastIndexConfig());
 const results = await client.searchByTerm({ q: 'javascript', max: 10 });
-
-// Get trending
-const trending = await client.getTrending({ lang: 'en', max: 20 });
-
-// Get episodes
-const episodes = await client.getEpisodesByFeedId({ id: 920666, max: 50 });
 ```
 
 See [PODCAST_INDEX_API.md](./PODCAST_INDEX_API.md) for complete documentation.

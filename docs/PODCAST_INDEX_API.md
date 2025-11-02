@@ -30,9 +30,25 @@ The Podcast Index API client provides a TypeScript interface to the [Podcast Ind
 1. Register for a free API key at https://api.podcastindex.org/
 2. You will receive an API key and secret
 
-### Environment Variables
+### Configuration
 
-Set the following environment variables:
+**Option 1: Using .env file (Recommended)**
+
+1. Copy the example file:
+   ```bash
+   cp .env.example .env
+   ```
+
+2. Edit `.env` with your credentials:
+   ```bash
+   PODCAST_INDEX_API_KEY=your-api-key-here
+   PODCAST_INDEX_API_SECRET=your-api-secret-here
+   # Optional: PODCAST_INDEX_BASE_URL=https://api.podcastindex.org/api/1.0
+   ```
+
+3. The `.env` file is automatically ignored by git (never commit your credentials!)
+
+**Option 2: Using environment variables directly**
 
 ```bash
 export PODCAST_INDEX_API_KEY="your-api-key"
@@ -46,7 +62,10 @@ export PODCAST_INDEX_BASE_URL="https://api.podcastindex.org/api/1.0"
 
 ```typescript
 import { PodcastIndexClient } from './clients';
-import { loadPodcastIndexConfig } from './config';
+import { loadPodcastIndexConfig, loadEnvFile } from './config';
+
+// Load .env file (if using .env for configuration)
+loadEnvFile();
 
 // Load configuration from environment variables
 const config = loadPodcastIndexConfig();

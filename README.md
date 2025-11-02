@@ -124,18 +124,27 @@ The Podcast Index API client provides access to the [Podcast Index](https://podc
 **Setup:**
 
 1. Register for a free API key at https://api.podcastindex.org/
-2. Set environment variables:
 
-```bash
-export PODCAST_INDEX_API_KEY="your-api-key"
-export PODCAST_INDEX_API_SECRET="your-api-secret"
-```
+2. **Option A: Using .env file (Recommended)**
+   ```bash
+   cp .env.example .env
+   # Edit .env and add your credentials
+   ```
+
+3. **Option B: Set environment variables directly**
+   ```bash
+   export PODCAST_INDEX_API_KEY="your-api-key"
+   export PODCAST_INDEX_API_SECRET="your-api-secret"
+   ```
 
 **Basic Usage:**
 
 ```typescript
 import { PodcastIndexClient } from 'pullapod/clients';
-import { loadPodcastIndexConfig } from 'pullapod/config';
+import { loadPodcastIndexConfig, loadEnvFile } from 'pullapod/config';
+
+// Load .env file (if using .env for configuration)
+loadEnvFile();
 
 // Load configuration from environment variables
 const config = loadPodcastIndexConfig();
@@ -183,9 +192,9 @@ console.log(`Total podcasts: ${stats.feedCountTotal.toLocaleString()}`);
 Run the included example to see the client in action:
 
 ```bash
-# Set your API credentials
-export PODCAST_INDEX_API_KEY="your-key"
-export PODCAST_INDEX_API_SECRET="your-secret"
+# Copy and configure .env file
+cp .env.example .env
+# Edit .env with your credentials
 
 # Run the example
 npm run dev examples/podcast-index-example.ts

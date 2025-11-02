@@ -1,13 +1,43 @@
 /**
  * Environment configuration management
  * Handles loading and validating environment variables
+ *
+ * Supports loading from .env files using dotenv.
+ * Call loadEnvFile() before accessing configuration if using .env files.
  */
+
+import { config as dotenvConfig } from 'dotenv';
+import { existsSync } from 'fs';
+import { resolve } from 'path';
 
 export class ConfigurationError extends Error {
   constructor(message: string) {
     super(message);
     this.name = 'ConfigurationError';
   }
+}
+
+/**
+ * Load environment variables from .env file
+ * This is optional - environment variables can also be set directly
+ *
+ * @param path Optional path to .env file (defaults to .env in current directory)
+ * @returns true if .env file was loaded, false if not found
+ */
+export function loadEnvFile(path?: string): boolean {
+  const envPath = path || resolve(process.cwd(), '.env');
+
+  if (!existsSync(envPath)) {
+    return false;
+  }
+
+  const result = dotenvConfig({ path: envPath });
+
+  if (result.error) {
+    throw new ConfigurationError(`Failed to load .env file: ${result.error.message}`);
+  }
+
+  return true;
 }
 
 /**

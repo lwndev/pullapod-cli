@@ -1,18 +1,24 @@
 /**
  * Example usage of the Podcast Index API client
  *
- * Before running this example, set the following environment variables:
+ * Setup:
+ * 1. Copy .env.example to .env
+ * 2. Add your API credentials to .env
+ * 3. Run: npm run dev examples/podcast-index-example.ts
+ *
+ * Alternatively, set environment variables directly:
  * export PODCAST_INDEX_API_KEY="your-api-key"
  * export PODCAST_INDEX_API_SECRET="your-api-secret"
- *
- * Run with: npm run dev examples/podcast-index-example.ts
  */
 
 import { PodcastIndexClient } from '../src/clients';
-import { loadPodcastIndexConfig, ConfigurationError } from '../src/config';
+import { loadPodcastIndexConfig, loadEnvFile, ConfigurationError } from '../src/config';
 
 async function main() {
   try {
+    // Load environment variables from .env file (optional)
+    loadEnvFile();
+
     // Load configuration from environment variables
     const config = loadPodcastIndexConfig();
     console.log('✓ Configuration loaded successfully');
