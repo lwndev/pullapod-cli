@@ -1,6 +1,6 @@
 {
   "name": "pullapod-cli",
-  "version": "0.2.5",
+  "version": "0.2.6",
   "description": "Pull a Pod - A command-line utility to download podcast episodes from RSS feeds",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
