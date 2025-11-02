@@ -33,7 +33,7 @@ This package is published to both npmjs.org and GitHub Packages.
 ### Option 1: Install from npmjs.org (Recommended - No auth required)
 
 ```bash
-npm install -g pullapod
+npm install -g pullapod-cli
 ```
 
 ### Option 2: Install from GitHub Packages
@@ -55,7 +55,7 @@ To create a GitHub token:
 Then install:
 
 ```bash
-npm install -g @lwndev/pullapod
+npm install -g @lwndev/pullapod-cli
 ```
 
 ### Or install locally for development:
