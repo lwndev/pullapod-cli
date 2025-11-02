@@ -23,11 +23,11 @@ import * as path from 'path';
  * See README.md for manual testing results.
  */
 describe.skip('Downloader', () => {
-  let downloader: Downloader;
+  let _downloader: Downloader;
   const testOutputDir = path.join(__dirname, 'test-downloads');
 
   beforeEach(() => {
-    downloader = new Downloader();
+    _downloader = new Downloader();
 
     // Clean up test directory
     if (fs.existsSync(testOutputDir)) {
@@ -42,7 +42,7 @@ describe.skip('Downloader', () => {
     }
   });
 
-  const createMockEpisode = (overrides?: Partial<PodcastEpisode>): PodcastEpisode => ({
+  const _createMockEpisode = (overrides?: Partial<PodcastEpisode>): PodcastEpisode => ({
     title: 'Test Episode',
     publishDate: new Date(2024, 0, 15),
     enclosureUrl: 'https://example.com/audio.mp3',

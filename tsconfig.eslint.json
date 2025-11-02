@@ -1,0 +1,14 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    // Don't emit anything - this is only for linting
+    "noEmit": true,
+    // Remove rootDir restriction so we can include tests/examples
+    "rootDir": null
+  },
+  "include": [
+    "src/**/*",
+    "tests/**/*",
+    "examples/**/*"
+  ]
+}
