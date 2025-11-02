@@ -42,12 +42,12 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/lwndev/pullapod.git"
+    "url": "git+https://github.com/lwndev/pullapod-cli.git"
   },
   "bugs": {
-    "url": "https://github.com/lwndev/pullapod/issues"
+    "url": "https://github.com/lwndev/pullapod-cli/issues"
   },
-  "homepage": "https://github.com/lwndev/pullapod#readme",
+  "homepage": "https://github.com/lwndev/pullapod-cli#readme",
   "dependencies": {
     "cli-progress": "^3.12.0",
     "commander": "^12.0.0",
