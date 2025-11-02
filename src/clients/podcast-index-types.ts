@@ -11,7 +11,7 @@ export interface PodcastIndexResponse<T> {
   feeds?: T[];
   items?: T[];
   feed?: T;
-  episodes?: any[];
+  episodes?: PodcastEpisode[];
   count?: number;
   query?: string;
   description?: string;

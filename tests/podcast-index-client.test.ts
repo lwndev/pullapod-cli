@@ -188,6 +188,24 @@ describe('PodcastIndexClient', () => {
       expect(result.feed?.itunesId).toBe(1234567890);
     });
 
+    it('should get podcast by GUID', async () => {
+      const podcastGuid = '917393e3-1382-5c6e-8f7e-facf67af2d10';
+      const mockData = {
+        status: 'true',
+        feed: {
+          id: 920666,
+          podcastGuid: podcastGuid,
+          title: 'Test Podcast',
+        },
+      };
+
+      fetchMock.mockResolvedValueOnce(createMockResponse(mockData));
+
+      const result = await client.getPodcastByGuid(podcastGuid);
+
+      expect(result.feed?.podcastGuid).toBe(podcastGuid);
+    });
+
     it('should get trending podcasts', async () => {
       const mockData = {
         status: 'true',
@@ -228,6 +246,28 @@ describe('PodcastIndexClient', () => {
       expect(result.items?.[0].feedId).toBe(920666);
     });
 
+    it('should get episodes by feed URL', async () => {
+      const feedUrl = 'https://example.com/feed.xml';
+      const mockData = {
+        status: 'true',
+        items: [
+          {
+            id: 123,
+            title: 'Episode 1',
+            feedId: 920666,
+          },
+        ],
+        count: 1,
+      };
+
+      fetchMock.mockResolvedValueOnce(createMockResponse(mockData));
+
+      const result = await client.getEpisodesByFeedUrl({ url: feedUrl, max: 10 });
+
+      expect(result.items).toHaveLength(1);
+      expect(result.items?.[0].title).toBe('Episode 1');
+    });
+
     it('should get episode by ID', async () => {
       const mockData = {
         status: 'true',
@@ -240,6 +280,25 @@ describe('PodcastIndexClient', () => {
       fetchMock.mockResolvedValueOnce(createMockResponse(mockData));
 
       const result = await client.getEpisodeById(123456);
+
+      expect(result.status).toBe('true');
+    });
+
+    it('should get episode by GUID', async () => {
+      const episodeGuid = 'episode-guid-123';
+      const feedUrl = 'https://example.com/feed.xml';
+      const mockData = {
+        status: 'true',
+        episode: {
+          id: 123456,
+          guid: episodeGuid,
+          title: 'Test Episode',
+        },
+      };
+
+      fetchMock.mockResolvedValueOnce(createMockResponse(mockData));
+
+      const result = await client.getEpisodeByGuid(episodeGuid, feedUrl);
 
       expect(result.status).toBe('true');
     });
@@ -291,6 +350,24 @@ describe('PodcastIndexClient', () => {
       const result = await client.getRecentFeeds({ max: 10, lang: 'en' });
 
       expect(result.feeds).toHaveLength(1);
+    });
+
+    it('should get new feeds', async () => {
+      const mockData = {
+        status: 'true',
+        feeds: [
+          { id: 1, title: 'Brand New Podcast 1' },
+          { id: 2, title: 'Brand New Podcast 2' },
+        ],
+        count: 2,
+      };
+
+      fetchMock.mockResolvedValueOnce(createMockResponse(mockData));
+
+      const result = await client.getNewFeeds({ max: 10, lang: 'en' });
+
+      expect(result.feeds).toHaveLength(2);
+      expect(result.count).toBe(2);
     });
   });
 
