@@ -33,11 +33,16 @@ This document outlines the implementation plan for adding five new CLI features 
 1. Add new `search` command to CLI router
 2. Create search command handler module
 3. Implement query parsing and validation
-4. Integrate with `PodcastIndexClient.searchByTerm()` and `searchByTitle()`
-5. Implement result formatting and display
-6. Add error handling
-7. Write unit and integration tests
-8. Update documentation and help text
+4. Implement CLI options:
+   - `--max <number>` - Max results (default: 10, range: 1-100)
+   - `--title-only` - Search titles only (uses `searchByTitle()` instead of `searchByTerm()`)
+   - `--similar` - Include similar matches (fuzzy matching)
+   - `--language <code>` - Filter by language code (may require client-side filtering if not supported by API)
+5. Integrate with `PodcastIndexClient.searchByTerm()` and `searchByTitle()`
+6. Implement result formatting and display (title, author, episode count, language, feed URL, description truncated to ~200 chars)
+7. Add error handling
+8. Write unit and integration tests
+9. Update documentation and help text
 
 #### Deliverables
 - `src/commands/search.ts` - Search command implementation
@@ -61,14 +66,18 @@ This document outlines the implementation plan for adding five new CLI features 
 #### Implementation Steps
 1. Add new `episodes` command to CLI router
 2. Create episodes command handler module
-3. Implement feed URL/ID detection logic
-4. Integrate with `PodcastIndexClient.getEpisodesByFeedId/Url()`
-5. Implement duration formatting utility
-6. Implement date filtering logic
-7. Implement episode result formatting
-8. Add HTML stripping for descriptions
-9. Write unit and integration tests
-10. Update documentation
+3. Implement feed URL/ID detection logic (numeric = ID, URL = feed URL)
+4. Implement CLI options:
+   - `--max <number>` - Max episodes (default: 20, range: 1-100)
+   - `--since <date>` - Only episodes after date (YYYY-MM-DD format, with validation)
+   - `--full` - Show full descriptions instead of truncated
+5. Integrate with `PodcastIndexClient.getEpisodesByFeedId/Url()`
+6. Implement duration formatting utility (seconds to "45 sec", "52 min", "1h 23min")
+7. Implement date filtering logic and YYYY-MM-DD format validation
+8. Implement episode result formatting (description truncated to ~150 chars by default, at word boundaries)
+9. Add HTML stripping for descriptions (strip tags and decode entities)
+10. Write unit and integration tests
+11. Update documentation
 
 #### Deliverables
 - `src/commands/episodes.ts` - Episodes command implementation
@@ -96,12 +105,17 @@ This document outlines the implementation plan for adding five new CLI features 
 2. Create info command handler module
 3. Implement feed URL/ID detection (reuse from episodes)
 4. Integrate with `PodcastIndexClient.getPodcastById/Url()`
-5. Implement status determination logic (active/inactive/dead)
-6. Implement language code to name conversion
+5. Implement status determination logic:
+   - **Dead**: `dead === 1`
+   - **Active**: `dead === 0` AND `newestItemPublishTime` within 90 days
+   - **Inactive**: `dead === 0` AND `newestItemPublishTime` older than 90 days
+   - Note: Use `newestItemPublishTime` instead of `lastUpdateTime` for accurate status
+6. Implement language code to name conversion (e.g., "English (en)")
 7. Implement category hierarchy formatting
-8. Implement info display formatting
-9. Write unit and integration tests
-10. Update documentation
+8. Implement info display formatting (title, author, language, episodes, feed ID/URL, website, artwork, description, categories, content type, explicit flag)
+9. Note: Detailed activity metrics (episodes in last 3/30/90 days) require additional API call to `getEpisodesByFeedId()` with `since` parameter - may simplify to showing only `newestItemPublishTime` in initial implementation
+10. Write unit and integration tests
+11. Update documentation
 
 #### Deliverables
 - `src/commands/info.ts` - Info command implementation
@@ -124,17 +138,29 @@ This document outlines the implementation plan for adding five new CLI features 
 - **Must precede Recent**: Recent command depends on this
 
 #### Implementation Steps
-1. Add new `favorite` command group to CLI router
-2. Define favorites file schema and location
+1. Add new `favorite` command group to CLI router with subcommands:
+   - `add <feed-url> [--name <name>]` - Add feed with optional custom name
+   - `list` - List all favorites
+   - `remove <name|url>` - Remove by name or URL
+   - `clear [--force]` - Clear all with confirmation (skip with --force)
+2. Define favorites file schema and location:
+   - Primary: `~/.config/pullapod/favorites.json`
+   - Fallback: `~/.pullapod/favorites.json`
+   - Support XDG_CONFIG_HOME environment variable: `$XDG_CONFIG_HOME/pullapod/favorites.json`
+   - JSON structure: `{version: 1, feeds: [{name, url, feedId, dateAdded}]}`
 3. Create favorites storage module
-4. Implement file I/O with atomic writes
-5. Implement `add` subcommand with duplicate detection
-6. Implement `list` subcommand with formatting
-7. Implement `remove` subcommand with matching logic
-8. Implement `clear` subcommand with confirmation
+4. Implement file I/O with atomic writes (write to temp, then rename)
+5. Implement `add` subcommand:
+   - Validate feed URL and query Podcast Index API with `getPodcastByUrl()`
+   - Auto-fetch podcast title if `--name` not provided
+   - Prevent duplicates by URL and feedId
+   - Store: name, url (canonical from API), feedId, dateAdded (ISO 8601)
+6. Implement `list` subcommand with formatted display
+7. Implement `remove` subcommand with matching logic (exact or partial name match, URL match)
+8. Implement `clear` subcommand with confirmation prompt (skip with `--force` flag)
 9. Add JSON validation and error recovery
 10. Write unit and integration tests
-11. Test cross-platform compatibility
+11. Test cross-platform compatibility (Linux, macOS, Windows paths)
 12. Update documentation
 
 #### Deliverables
@@ -159,16 +185,25 @@ This document outlines the implementation plan for adding five new CLI features 
 
 #### Implementation Steps
 1. Add new `recent` command to CLI router
-2. Create recent command handler module
+2. Create recent command handler module with options:
+   - `--max <number>` - Max episodes per feed (default: 5, range: 1-20)
+   - `--days <number>` - Only episodes from last N days (default: 7, range: 1-90)
+   - `--feed <name>` - Show recent episodes from specific saved feed only
 3. Implement favorites file loading (reuse from Phase 4)
-4. Implement parallel episode fetching with rate limiting
+4. Implement parallel episode fetching with rate limiting:
+   - Use `getEpisodesByFeedId()` with `since` parameter for each favorite
+   - Limit concurrent API requests to maximum 5 at a time (NFR-5)
+   - Calculate `since` timestamp from `--days` option
 5. Implement date range calculation and filtering
-6. Implement feed name filtering
-7. Implement episode grouping and sorting logic
-8. Implement aggregate result formatting
-9. Add partial failure handling (continue on errors)
+6. Implement feed name filtering (case-insensitive, partial match) when `--feed` option used
+7. Implement episode grouping and sorting logic:
+   - Group by podcast
+   - Sort podcasts by most recent episode first
+   - Within each podcast, sort episodes newest first
+8. Implement aggregate result formatting (compact one-line format per episode)
+9. Add partial failure handling (skip failed feeds, show warning, continue with others)
 10. Write unit and integration tests
-11. Test with various feed counts
+11. Test with various feed counts (especially >20 feeds)
 12. Update documentation
 
 #### Deliverables
@@ -192,9 +227,10 @@ Build these utilities as needed during each phase:
    - Developed in: Phase 2 (Episodes)
 
 2. **Formatting Utilities** (`src/utils/format.ts`)
-   - Text truncation at word boundaries
+   - Text truncation at word boundaries (important: must not cut mid-word)
+   - Add "..." indicator when truncated
    - Number formatting with commas
-   - URL formatting
+   - URL formatting (ensure no line wrapping)
    - Developed in: Phase 1 (Search)
 
 3. **Duration Utilities** (`src/utils/duration.ts`)
@@ -202,15 +238,17 @@ Build these utilities as needed during each phase:
    - Developed in: Phase 2 (Episodes)
 
 4. **HTML Utilities** (`src/utils/html.ts`)
-   - Strip HTML tags from text
-   - Decode HTML entities
+   - Strip HTML tags from text (remove all HTML markup)
+   - Decode HTML entities (e.g., `&amp;` to `&`, `&#39;` to `'`)
+   - Preserve paragraph breaks where appropriate
    - Developed in: Phase 2 (Episodes)
 
 5. **Validation Utilities** (`src/utils/validation.ts`)
-   - URL validation
-   - Feed ID detection
+   - URL validation (check format, handle variations)
+   - Feed ID detection (numeric vs URL)
+   - Date format validation (YYYY-MM-DD)
    - Input sanitization
-   - Developed in: Phase 1 (Search)
+   - Developed in: Phase 1 (Search), extended in Phase 2 (Episodes)
 
 ### CLI Infrastructure Updates
 
