@@ -32,6 +32,11 @@ export class PodcastParser {
   async parseFeed(feedUrl: string): Promise<PodcastEpisode[]> {
     try {
       const feed = await this.parser.parseURL(feedUrl);
+
+      // Debug: Ensure feed was returned
+      if (!feed) {
+        throw new Error('Parser returned null or undefined feed');
+      }
       const podcastTitle = feed.title || 'Unknown Podcast';
 
       // Get podcast-level artwork
@@ -75,7 +80,13 @@ export class PodcastParser {
 
       return episodes;
     } catch (error) {
-      throw new Error(`Failed to parse RSS feed: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      // Enhanced error reporting for debugging
+      const errorDetails = error instanceof Error
+        ? error.message
+        : typeof error === 'object' && error !== null
+          ? JSON.stringify(error)
+          : String(error);
+      throw new Error(`Failed to parse RSS feed: ${errorDetails}`);
     }
   }
 }
