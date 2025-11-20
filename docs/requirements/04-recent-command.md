@@ -114,7 +114,7 @@ ShopTalk Show (1 new episode)
 
 ---
 Total: 6 new episodes across 3 podcasts
-Download with: pullapod <feed-url> --date YYYY-MM-DD
+Download with: pullapod --feed <feed-url> --date YYYY-MM-DD
 ```
 
 ### Output Format (No New Episodes)
@@ -145,7 +145,7 @@ Recent episodes from "JavaScript Jabber" (last 7 days):
 
 ---
 3 new episodes
-Download with: pullapod <feed-url> --date YYYY-MM-DD
+Download with: pullapod --feed <feed-url> --date YYYY-MM-DD
 ```
 
 ## Non-Functional Requirements

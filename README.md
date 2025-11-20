@@ -101,7 +101,11 @@ The search results will show you the feed URL which you can use with the downloa
 #### Download Podcast Episodes
 
 ```bash
+# Using default command (backward compatible)
 pullapod --feed <RSS_URL> [options]
+
+# Or using explicit download subcommand
+pullapod download --feed <RSS_URL> [options]
 ```
 
 **Download Options:**
@@ -121,6 +125,8 @@ pullapod --feed <RSS_URL> [options]
 Download an episode from a specific date:
 ```bash
 pullapod --feed https://example.com/podcast.rss --date 2024-01-15
+# or
+pullapod download --feed https://example.com/podcast.rss --date 2024-01-15
 ```
 
 Download episodes from a date range:
@@ -314,6 +320,8 @@ npm run build
 
 # Development mode (with ts-node)
 npm run dev -- --feed <url> --date 2024-01-01
+# or with explicit download command
+npm run dev -- download --feed <url> --date 2024-01-01
 
 # Watch mode
 npm run watch

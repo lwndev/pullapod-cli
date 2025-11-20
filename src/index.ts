@@ -24,8 +24,10 @@ program
 // Register search command
 registerSearchCommand(program);
 
-// Default download command (for backward compatibility)
+// Download command (default for backward compatibility)
 program
+  .command('download', { isDefault: true })
+  .description('Download podcast episodes from RSS feed')
   .requiredOption('-f, --feed <url>', 'RSS feed URL')
   .option('-o, --output <directory>', 'Output directory (defaults to current directory)', process.cwd())
   .option('-d, --date <date>', 'Download episode from specific date (YYYY-MM-DD)')

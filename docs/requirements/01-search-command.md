@@ -84,7 +84,7 @@ Display search results in numbered list format with:
 
 ### FR-6: User Guidance
 - Include helpful message showing how to use feed URL with download command
-- Example: "Use feed URL with: pullapod <feed-url> [options]"
+- Example: "Use feed URL with: pullapod --feed <feed-url> [options]" or "pullapod download --feed <feed-url> [options]"
 
 ## Output Format
 
@@ -114,7 +114,7 @@ Found 5 podcasts matching "javascript":
    deep into web development topics, explaining how they work and talking...
 
 ---
-Tip: Download episodes with: pullapod <feed-url> --date YYYY-MM-DD
+Tip: Download episodes with: pullapod --feed <feed-url> --date YYYY-MM-DD
 ```
 
 ## Non-Functional Requirements

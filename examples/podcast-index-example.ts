@@ -67,6 +67,8 @@ async function main() {
       console.log('📥 To download episodes from this podcast with pullapod-cli:');
       console.log(`   pullapod --feed "${selectedFeed.url}" --date 2024-01-15`);
       console.log(`   pullapod --feed "${selectedFeed.url}" --name "interview"`);
+      console.log(`   # Or using explicit download command:`);
+      console.log(`   pullapod download --feed "${selectedFeed.url}" --date 2024-01-15`);
       console.log('');
 
       // ============================================================================
