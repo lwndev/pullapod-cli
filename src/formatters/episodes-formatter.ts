@@ -96,7 +96,7 @@ export function formatEpisode(
   const lines: string[] = [];
 
   // Episode number and title
-  let header = `${index}. ${episode.title}`;
+  const header = `${index}. ${episode.title}`;
   lines.push(header);
 
   // Published date

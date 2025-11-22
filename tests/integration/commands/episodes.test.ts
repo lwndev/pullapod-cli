@@ -11,7 +11,6 @@
 
 import { PodcastIndexClient } from '../../../src/clients/podcast-index-client';
 import { loadConfig } from '../../../src/config';
-import { episodesCommand, EpisodesOptions } from '../../../src/commands/episodes';
 import { formatEpisodesList } from '../../../src/formatters/episodes-formatter';
 
 describe('episodes command integration tests', () => {

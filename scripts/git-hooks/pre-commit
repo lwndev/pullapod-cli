@@ -1,0 +1,32 @@
+#!/bin/bash
+
+# Pre-commit hook to run tests and linting
+# This helps catch failures locally before they reach GitHub Actions
+
+set -e
+
+echo "Running pre-commit checks..."
+
+# Change to the project root directory
+cd "$(git rev-parse --show-toplevel)"
+
+# Run linting
+echo ""
+echo "→ Running linter..."
+npm run lint
+echo "✓ Linting passed"
+
+# Run unit tests
+echo ""
+echo "→ Running unit tests..."
+npm run test:unit
+echo "✓ Unit tests passed"
+
+# Run integration tests
+echo ""
+echo "→ Running integration tests..."
+npm run test:integration
+echo "✓ Integration tests passed"
+
+echo ""
+echo "✓ All pre-commit checks passed!"

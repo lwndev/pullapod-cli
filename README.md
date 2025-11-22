@@ -333,6 +333,33 @@ npm test
 npm run audit
 ```
 
+### Git Hooks
+
+This project includes a pre-commit hook that runs linting and all tests before allowing commits. The hook is automatically installed when you run `npm install`.
+
+**The pre-commit hook runs:**
+- ESLint to check code style
+- Unit tests
+- Integration tests
+
+If any check fails, the commit will be blocked. This helps catch issues locally before they reach CI/CD.
+
+**Manual installation:**
+
+If you need to reinstall the hooks:
+
+```bash
+npm run prepare
+```
+
+**Bypassing hooks:**
+
+In rare cases where you need to bypass the hook (not recommended):
+
+```bash
+git commit --no-verify
+```
+
 ## Release Process
 
 To create a new release:

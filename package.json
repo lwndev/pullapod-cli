@@ -27,6 +27,7 @@
     "lint": "eslint src tests examples --ext .ts",
     "lint:fix": "eslint src tests examples --ext .ts --fix",
     "audit": "npm audit",
+    "prepare": "bash scripts/install-hooks.sh",
     "prepublishOnly": "npm run build",
     "preversion": "npm run build && npm test && npm run lint",
     "version": "git add package.json package-lock.json",

@@ -165,7 +165,7 @@ describe('episodes formatter', () => {
 
       // All other lines should be indented with 3 spaces
       for (let i = 1; i < lines.length; i++) {
-        expect(lines[i]).toMatch(/^   /);
+        expect(lines[i]).toMatch(/^ {3}/);
       }
     });
 
