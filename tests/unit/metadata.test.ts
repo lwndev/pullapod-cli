@@ -1,5 +1,5 @@
-import { MetadataEmbedder } from '../src/metadata';
-import { PodcastEpisode } from '../src/types';
+import { MetadataEmbedder } from '../../src/metadata';
+import { PodcastEpisode } from '../../src/types';
 import * as fs from 'fs';
 import * as path from 'path';
 import NodeID3 from 'node-id3';

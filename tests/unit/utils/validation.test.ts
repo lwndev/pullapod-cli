@@ -11,8 +11,8 @@ import {
   validateRange,
   validateLanguageCode,
   sanitizeSearchQuery,
-} from '../../src/utils/validation';
-import { ValidationError } from '../../src/utils/errors';
+} from '../../../src/utils/validation';
+import { ValidationError } from '../../../src/utils/errors';
 
 describe('validation utilities', () => {
   describe('validateUrl', () => {

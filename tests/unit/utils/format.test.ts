@@ -10,7 +10,7 @@ import {
   capitalize,
   formatBoolean,
   pluralize,
-} from '../../src/utils/format';
+} from '../../../src/utils/format';
 
 describe('format utilities', () => {
   describe('truncateText', () => {

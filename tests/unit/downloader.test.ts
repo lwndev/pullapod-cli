@@ -1,5 +1,5 @@
-import { Downloader } from '../src/downloader';
-import { PodcastEpisode } from '../src/types';
+import { Downloader } from '../../src/downloader';
+import { PodcastEpisode } from '../../src/types';
 import * as fs from 'fs';
 import * as path from 'path';
 

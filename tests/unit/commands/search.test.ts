@@ -2,16 +2,16 @@
  * Tests for search command
  */
 
-import { searchCommand, SearchOptions } from '../../src/commands/search';
-import { PodcastIndexClient } from '../../src/clients/podcast-index-client';
-import { formatSearchResults } from '../../src/formatters/search-formatter';
-import { loadConfig } from '../../src/config';
-import { PodcastFeed } from '../../src/clients/podcast-index-types';
+import { searchCommand, SearchOptions } from '../../../src/commands/search';
+import { PodcastIndexClient } from '../../../src/clients/podcast-index-client';
+import { formatSearchResults } from '../../../src/formatters/search-formatter';
+import { loadConfig } from '../../../src/config';
+import { PodcastFeed } from '../../../src/clients/podcast-index-types';
 
 // Mock dependencies
-jest.mock('../../src/clients/podcast-index-client');
-jest.mock('../../src/formatters/search-formatter');
-jest.mock('../../src/config');
+jest.mock('../../../src/clients/podcast-index-client');
+jest.mock('../../../src/formatters/search-formatter');
+jest.mock('../../../src/config');
 
 describe('search command', () => {
   const mockFeeds: PodcastFeed[] = [

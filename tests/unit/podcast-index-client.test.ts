@@ -3,8 +3,8 @@
  */
 
 import fetchMock from 'jest-fetch-mock';
-import { PodcastIndexClient } from '../src/clients/podcast-index-client';
-import { HttpClientError } from '../src/clients/base-client';
+import { PodcastIndexClient } from '../../src/clients/podcast-index-client';
+import { HttpClientError } from '../../src/clients/base-client';
 
 // Helper to create a proper mock Response
 function createMockResponse(data: unknown, status: number = 200, statusText: string = 'OK') {

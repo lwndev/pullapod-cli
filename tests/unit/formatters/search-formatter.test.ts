@@ -2,8 +2,8 @@
  * Tests for search result formatter
  */
 
-import { formatSearchResults, formatPodcastFeedCompact } from '../../src/formatters/search-formatter';
-import { PodcastFeed } from '../../src/clients/podcast-index-types';
+import { formatSearchResults, formatPodcastFeedCompact } from '../../../src/formatters/search-formatter';
+import { PodcastFeed } from '../../../src/clients/podcast-index-types';
 
 describe('search formatter', () => {
   const mockFeed: PodcastFeed = {

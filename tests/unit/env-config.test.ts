@@ -11,7 +11,7 @@ import {
   loadPodcastIndexConfig,
   loadEnvFile,
   ConfigurationError,
-} from '../src/config/env-config';
+} from '../../src/config/env-config';
 
 describe('Environment Configuration', () => {
   const originalEnv = process.env;

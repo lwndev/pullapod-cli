@@ -3,7 +3,7 @@
  */
 
 import fetchMock from 'jest-fetch-mock';
-import { BaseHttpClient, HttpClientError } from '../src/clients/base-client';
+import { BaseHttpClient, HttpClientError } from '../../src/clients/base-client';
 
 // Helper to create a proper mock Response
 function createMockResponse(data: unknown, status: number = 200, statusText: string = 'OK', contentType: string = 'application/json') {

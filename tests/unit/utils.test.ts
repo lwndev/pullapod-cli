@@ -4,7 +4,7 @@ import {
   isDateInRange,
   getFileExtension,
   formatBytes,
-} from '../src/utils';
+} from '../../src/utils';
 
 describe('sanitizeForFilesystem', () => {
   it('should sanitize filenames with special characters', () => {

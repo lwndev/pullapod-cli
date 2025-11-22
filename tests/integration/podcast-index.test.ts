@@ -9,8 +9,8 @@
 
 import fetchMock from 'jest-fetch-mock';
 import nock from 'nock';
-import { PodcastIndexClient } from '../src/clients/podcast-index-client';
-import { loadEnvFile, loadPodcastIndexConfig, ConfigurationError } from '../src/config/env-config';
+import { PodcastIndexClient } from '../../src/clients/podcast-index-client';
+import { loadEnvFile, loadPodcastIndexConfig, ConfigurationError } from '../../src/config/env-config';
 
 // IMPORTANT: Disable fetch mocking for integration tests
 // We want to make REAL HTTP calls to the API

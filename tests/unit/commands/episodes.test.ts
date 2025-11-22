@@ -2,16 +2,16 @@
  * Tests for episodes command
  */
 
-import { episodesCommand, EpisodesOptions } from '../../src/commands/episodes';
-import { PodcastIndexClient } from '../../src/clients/podcast-index-client';
-import { formatEpisodesList } from '../../src/formatters/episodes-formatter';
-import { loadConfig } from '../../src/config';
-import { PodcastEpisode } from '../../src/clients/podcast-index-types';
+import { episodesCommand, EpisodesOptions } from '../../../src/commands/episodes';
+import { PodcastIndexClient } from '../../../src/clients/podcast-index-client';
+import { formatEpisodesList } from '../../../src/formatters/episodes-formatter';
+import { loadConfig } from '../../../src/config';
+import { PodcastEpisode } from '../../../src/clients/podcast-index-types';
 
 // Mock dependencies
-jest.mock('../../src/clients/podcast-index-client');
-jest.mock('../../src/formatters/episodes-formatter');
-jest.mock('../../src/config');
+jest.mock('../../../src/clients/podcast-index-client');
+jest.mock('../../../src/formatters/episodes-formatter');
+jest.mock('../../../src/config');
 
 describe('episodes command', () => {
   const mockEpisodes: PodcastEpisode[] = [

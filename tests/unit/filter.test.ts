@@ -1,5 +1,5 @@
-import { EpisodeFilter } from '../src/filter';
-import { PodcastEpisode } from '../src/types';
+import { EpisodeFilter } from '../../src/filter';
+import { PodcastEpisode } from '../../src/types';
 
 describe('EpisodeFilter', () => {
   let filter: EpisodeFilter;

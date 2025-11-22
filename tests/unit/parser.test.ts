@@ -1,4 +1,4 @@
-import { PodcastParser } from '../src/parser';
+import { PodcastParser } from '../../src/parser';
 import Parser from 'rss-parser';
 
 // Mock rss-parser module

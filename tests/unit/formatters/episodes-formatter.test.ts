@@ -8,8 +8,8 @@ import {
   formatDescription,
   formatEpisode,
   formatEpisodesList,
-} from '../../src/formatters/episodes-formatter';
-import { PodcastEpisode } from '../../src/clients/podcast-index-types';
+} from '../../../src/formatters/episodes-formatter';
+import { PodcastEpisode } from '../../../src/clients/podcast-index-types';
 
 describe('episodes formatter', () => {
   const mockEpisode: PodcastEpisode = {
