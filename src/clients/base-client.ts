@@ -127,10 +127,32 @@ export abstract class BaseHttpClient {
       let data: T;
       const contentType = response.headers.get('content-type');
 
+      // Always try to read as text first, then parse as JSON if appropriate
+      const responseText = await response.text();
+
       if (contentType?.includes('application/json')) {
-        data = (await response.json()) as T;
+        try {
+          data = JSON.parse(responseText) as T;
+        } catch (parseError) {
+          // API returned content-type: application/json but body is not valid JSON
+          // This happens with some error responses from Podcast Index API
+          if (!response.ok) {
+            // For error responses, use the text as-is
+            throw new HttpClientError(
+              `API Error: ${responseText}`,
+              response.status,
+              responseText
+            );
+          }
+          // For successful responses, this is unexpected
+          throw new HttpClientError(
+            `Failed to parse JSON response: ${parseError instanceof Error ? parseError.message : 'Unknown error'}`,
+            response.status,
+            responseText
+          );
+        }
       } else {
-        data = (await response.text()) as T;
+        data = responseText as T;
       }
 
       // Handle HTTP errors

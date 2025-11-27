@@ -223,5 +223,102 @@ describe('BaseHttpClient', () => {
       const response = await client.testGet('/test');
       expect(response.data).toBe('Plain text response');
     });
+
+    it('should handle invalid JSON with application/json content-type on error responses', async () => {
+      // Simulates the Podcast Index API bug where it returns plain text
+      // with content-type: application/json on authentication errors
+      const errorMessage = 'The X-Auth-Key header contains an invalid API key. Please see: https://podcastindex-org.github.io/docs-api/#overview--authentication-details';
+
+      const mockResponse = {
+        ok: false,
+        status: 401,
+        statusText: 'Unauthorized',
+        headers: new Headers({
+          'Content-Type': 'application/json',
+        }),
+        json: () => Promise.reject(new Error('Unexpected token')), // JSON parsing fails
+        text: () => Promise.resolve(errorMessage),
+      } as Response;
+
+      fetchMock.mockResolvedValueOnce(mockResponse);
+
+      await expect(client.testGet('/test')).rejects.toThrow(HttpClientError);
+
+      // Re-mock to check the error message
+      fetchMock.mockResolvedValueOnce({
+        ok: false,
+        status: 401,
+        statusText: 'Unauthorized',
+        headers: new Headers({
+          'Content-Type': 'application/json',
+        }),
+        json: () => Promise.reject(new Error('Unexpected token')),
+        text: () => Promise.resolve(errorMessage),
+      } as Response);
+
+      try {
+        await client.testGet('/test');
+        fail('Should have thrown error');
+      } catch (error) {
+        expect(error).toBeInstanceOf(HttpClientError);
+        expect((error as Error).message).toContain('API Error');
+        expect((error as Error).message).toContain('X-Auth-Key');
+      }
+    });
+
+    it('should handle invalid JSON with application/json content-type and hash-related errors', async () => {
+      // Another variant of the Podcast Index API error
+      const errorMessage = 'The hash is invalid or expired.';
+
+      const mockResponse = {
+        ok: false,
+        status: 401,
+        statusText: 'Unauthorized',
+        headers: new Headers({
+          'Content-Type': 'application/json',
+        }),
+        json: () => Promise.reject(new Error('Unexpected token \'T\', "The hash i"... is not valid JSON')),
+        text: () => Promise.resolve(errorMessage),
+      } as Response;
+
+      fetchMock.mockResolvedValueOnce(mockResponse);
+
+      try {
+        await client.testGet('/test');
+        fail('Should have thrown error');
+      } catch (error) {
+        expect(error).toBeInstanceOf(HttpClientError);
+        // Should show the actual error message, not the JSON parsing error
+        expect((error as Error).message).toContain('API Error');
+        expect((error as Error).message).toContain('hash');
+        expect((error as Error).message).not.toContain('not valid JSON');
+      }
+    });
+
+    it('should handle invalid JSON with application/json content-type on successful responses', async () => {
+      // For successful responses (200), invalid JSON should still throw but with a different message
+      const invalidJson = 'This is not JSON';
+
+      const mockResponse = {
+        ok: true,
+        status: 200,
+        statusText: 'OK',
+        headers: new Headers({
+          'Content-Type': 'application/json',
+        }),
+        json: () => Promise.reject(new Error('Unexpected token')),
+        text: () => Promise.resolve(invalidJson),
+      } as Response;
+
+      fetchMock.mockResolvedValueOnce(mockResponse);
+
+      try {
+        await client.testGet('/test');
+        fail('Should have thrown error');
+      } catch (error) {
+        expect(error).toBeInstanceOf(HttpClientError);
+        expect((error as Error).message).toContain('Failed to parse JSON response');
+      }
+    });
   });
 });
