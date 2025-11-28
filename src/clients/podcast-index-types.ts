@@ -51,6 +51,7 @@ export interface PodcastFeed {
   medium?: string;
   episodeCount?: number;
   imageUrlHash?: number;
+  newestItemPublishTime?: number;
 }
 
 /**

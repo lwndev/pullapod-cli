@@ -9,8 +9,8 @@ This document outlines the implementation plan for adding five new CLI features 
 | Feature ID | Feature Name | Priority | Complexity | Estimated Effort | Status |
 |------------|--------------|----------|------------|------------------|--------|
 | FEAT-001   | Search       | High     | Low        | 2-3 days         | ✅ Complete |
-| FEAT-002   | Episodes     | High     | Medium     | 3-4 days         | Pending |
-| FEAT-003   | Info         | Medium   | Low        | 2-3 days         | Pending |
+| FEAT-002   | Episodes     | High     | Medium     | 3-4 days         | ✅ Complete |
+| FEAT-003   | Info         | Medium   | Low        | 2-3 days         | 🚧 In Progress |
 | FEAT-005   | Favorite     | Medium   | Medium     | 3-4 days         | Pending |
 | FEAT-004   | Recent       | Medium   | High       | 4-5 days         | Pending |
 
@@ -55,9 +55,12 @@ This document outlines the implementation plan for adding five new CLI features 
 
 ---
 
-### Phase 2: Preview Capability (FEAT-002)
+### Phase 2: Preview Capability (FEAT-002) ✅
 **Feature:** Episodes Command
 **Duration:** 3-4 days
+**Status:** Complete
+
+> **Implementation Note:** Phase 2 completed successfully. The episodes command is now available with support for feed URL/ID detection, date filtering, duration formatting, and HTML stripping from descriptions. All deliverables have been implemented and tested.
 
 #### Rationale
 - **Natural progression**: After finding a podcast, users want to preview episodes
@@ -83,18 +86,19 @@ This document outlines the implementation plan for adding five new CLI features 
 11. Update documentation
 
 #### Deliverables
-- `src/commands/episodes.ts` - Episodes command implementation
-- `src/formatters/episode-formatter.ts` - Episode formatting
-- `src/utils/duration.ts` - Duration formatting utility
-- `src/utils/html.ts` - HTML stripping utility
-- `tests/commands/episodes.test.ts` - Tests
-- Updated `README.md` with episodes examples
+- ✅ `src/commands/episodes.ts` - Episodes command implementation
+- ✅ `src/formatters/episodes-formatter.ts` - Episode formatting
+- ✅ Duration formatting utility (in episodes-formatter.ts)
+- ✅ HTML stripping utility (in utils/format.ts)
+- ✅ `tests/unit/commands/episodes.test.ts` - Tests
+- ✅ Updated `README.md` with episodes examples
 
 ---
 
-### Phase 3: Feed Information (FEAT-003)
+### Phase 3: Feed Information (FEAT-003) 🚧
 **Feature:** Info Command
 **Duration:** 2-3 days
+**Status:** In Progress
 
 #### Rationale
 - **Supporting feature**: Complements search and episodes for verification
@@ -121,11 +125,14 @@ This document outlines the implementation plan for adding five new CLI features 
 11. Update documentation
 
 #### Deliverables
-- `src/commands/info.ts` - Info command implementation
-- `src/formatters/info-formatter.ts` - Info formatting
-- `src/utils/language.ts` - Language code utilities (optional)
-- `tests/commands/info.test.ts` - Tests
-- Updated `README.md` with info examples
+- ✅ `src/commands/info.ts` - Info command implementation
+- ✅ `src/formatters/info-formatter.ts` - Info formatting
+- ✅ `src/utils/language.ts` - Language code utilities
+- ✅ `tests/unit/commands/info.test.ts` - Unit tests
+- ✅ `tests/unit/formatters/info-formatter.test.ts` - Formatter tests
+- ✅ `tests/unit/utils/language.test.ts` - Language utility tests
+- ✅ `tests/integration/commands/info.test.ts` - Integration tests
+- ✅ Updated `README.md` with info examples
 
 ---
 
@@ -363,8 +370,8 @@ Each feature must meet:
 
 ### Week 1-2: Discovery Features
 - ✅ **Phase 1: Search command (days 1-3) - COMPLETE**
-- ⏳ Phase 2: Episodes command (days 4-7)
-- ⏳ Phase 3: Info command (days 8-10)
+- ✅ **Phase 2: Episodes command (days 4-7) - COMPLETE**
+- 🚧 **Phase 3: Info command (days 8-10) - IN PROGRESS**
 
 **Milestone 1:** Core discovery features complete
 

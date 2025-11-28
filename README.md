@@ -133,6 +133,33 @@ pullapod episodes https://example.com/podcast.rss --full
 
 The episodes list will show you episode titles, publish dates, and descriptions to help you decide what to download.
 
+#### View Podcast Information
+
+Before downloading, you can view detailed information about a podcast feed:
+
+```bash
+pullapod info <feed>
+```
+
+**Info Examples:**
+
+```bash
+# Get info using feed URL
+pullapod info https://feeds.fireside.fm/javascriptjabber/rss
+
+# Get info using Podcast Index feed ID
+pullapod info 920666
+```
+
+The info display shows:
+- Basic metadata: title, author, language, episode count
+- Feed ID, iTunes ID, feed URL, website, artwork URL
+- Full description (HTML stripped)
+- Categories
+- Content type and explicit flag
+- Last update time with relative date
+- Feed health status (Active ✓, Inactive ⚠, or Dead ✗)
+
 #### Download Podcast Episodes
 
 ```bash
@@ -191,10 +218,13 @@ pullapod --feed https://example.com/podcast.rss --date 2024-01-15 --no-metadata
 pullapod search "javascript podcast" --max 5
 
 # 2. Copy the feed URL from the search results
-# 3. Preview recent episodes
+# 3. Get detailed info about the podcast
+pullapod info https://feeds.fireside.fm/javascriptjabber/rss
+
+# 4. Preview recent episodes
 pullapod episodes https://feeds.fireside.fm/javascriptjabber/rss --max 10
 
-# 4. Download a specific episode
+# 5. Download a specific episode
 pullapod --feed https://feeds.fireside.fm/javascriptjabber/rss --date 2024-01-15
 ```
 
@@ -314,12 +344,17 @@ pullapod-cli/
 │   │   ├── podcast-index-client.ts
 │   │   └── podcast-index-types.ts
 │   ├── commands/             # CLI command handlers
-│   │   └── search.ts         # Search command
+│   │   ├── search.ts         # Search command
+│   │   ├── episodes.ts       # Episodes command
+│   │   └── info.ts           # Info command
 │   ├── formatters/           # Output formatting
-│   │   └── search-formatter.ts
+│   │   ├── search-formatter.ts
+│   │   ├── episodes-formatter.ts
+│   │   └── info-formatter.ts
 │   ├── utils/                # Shared utilities
 │   │   ├── errors.ts         # Error handling
 │   │   ├── format.ts         # Text formatting
+│   │   ├── language.ts       # Language code utilities
 │   │   └── validation.ts     # Input validation
 │   ├── config/               # Configuration management
 │   │   └── env-config.ts     # Environment variable handling
