@@ -160,6 +160,56 @@ The info display shows:
 - Last update time with relative date
 - Feed health status (Active ✓, Inactive ⚠, or Dead ✗)
 
+#### Manage Favorite Podcasts
+
+Save your favorite podcast feeds for quick access:
+
+```bash
+pullapod favorite <subcommand> [options]
+```
+
+**Subcommands:**
+
+- `add <feed-url>` - Add a podcast to favorites
+- `list` - Show all saved favorites
+- `remove <name|url>` - Remove a podcast from favorites
+- `clear` - Remove all favorites
+
+**Add Options:**
+
+- `--name <name>` - Custom name for the feed (optional, auto-fetches from API)
+
+**Clear Options:**
+
+- `--force` - Skip confirmation prompt
+
+**Favorite Examples:**
+
+```bash
+# Add a podcast (auto-fetches name from API)
+pullapod favorite add https://feeds.fireside.fm/javascriptjabber/rss
+
+# Add with a custom name
+pullapod favorite add https://feeds.example.com/feed.xml --name "My Podcast"
+
+# List all favorites
+pullapod favorite list
+
+# Remove by name (case-insensitive, supports partial match)
+pullapod favorite remove "JavaScript Jabber"
+
+# Remove by URL
+pullapod favorite remove https://feeds.fireside.fm/javascriptjabber/rss
+
+# Clear all favorites (with confirmation)
+pullapod favorite clear
+
+# Clear all favorites (skip confirmation)
+pullapod favorite clear --force
+```
+
+Favorites are stored in `~/.config/pullapod/favorites.json` (or `$XDG_CONFIG_HOME/pullapod/favorites.json` if set).
+
 #### Download Podcast Episodes
 
 ```bash
@@ -346,6 +396,7 @@ pullapod-cli/
 │   │   └── podcast-index-types.ts
 │   ├── commands/             # CLI command handlers
 │   │   ├── episodes.ts       # Episodes command
+│   │   ├── favorite.ts       # Favorite command
 │   │   ├── info.ts           # Info command
 │   │   └── search.ts         # Search command
 │   ├── config/               # Configuration management
@@ -353,8 +404,11 @@ pullapod-cli/
 │   │   └── index.ts          # Config exports
 │   ├── formatters/           # Output formatting
 │   │   ├── episodes-formatter.ts
+│   │   ├── favorite-formatter.ts
 │   │   ├── info-formatter.ts
 │   │   └── search-formatter.ts
+│   ├── storage/              # Data persistence
+│   │   └── favorites.ts      # Favorites file management
 │   ├── utils/                # Shared utilities
 │   │   ├── errors.ts         # Error handling
 │   │   ├── format.ts         # Text formatting
