@@ -10,6 +10,7 @@ import { MetadataEmbedder } from './metadata';
 import { FilterOptions } from './types';
 import { registerSearchCommand } from './commands/search';
 import { registerEpisodesCommand } from './commands/episodes';
+import { registerInfoCommand } from './commands/info';
 
 const packageJson = JSON.parse(
   readFileSync(path.join(__dirname, '../package.json'), 'utf-8')
@@ -27,6 +28,9 @@ registerSearchCommand(program);
 
 // Register episodes command
 registerEpisodesCommand(program);
+
+// Register info command
+registerInfoCommand(program);
 
 // Download command (default for backward compatibility)
 program
