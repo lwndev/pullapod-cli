@@ -299,8 +299,8 @@ console.log(`Total podcasts: ${stats.feedCountTotal.toLocaleString()}`);
 
 **Documentation:**
 
-- [Podcast Index API Documentation](docs/PODCAST_INDEX_API.md) - Complete API reference with detailed examples
-- [API Clients Architecture](docs/API_CLIENTS.md) - Guide for adding new API clients
+- [Podcast Index API Documentation](docs/features/PODCAST_INDEX_API.md) - Complete API reference with detailed examples
+- [API Clients Architecture](docs/features/API_CLIENTS.md) - Guide for adding new API clients
 
 **Example:**
 
@@ -341,40 +341,55 @@ pullapod-cli/
 ├── src/
 │   ├── clients/              # API client implementations
 │   │   ├── base-client.ts    # Abstract HTTP client
+│   │   ├── index.ts          # Client exports
 │   │   ├── podcast-index-client.ts
 │   │   └── podcast-index-types.ts
 │   ├── commands/             # CLI command handlers
-│   │   ├── search.ts         # Search command
 │   │   ├── episodes.ts       # Episodes command
-│   │   └── info.ts           # Info command
+│   │   ├── info.ts           # Info command
+│   │   └── search.ts         # Search command
+│   ├── config/               # Configuration management
+│   │   ├── env-config.ts     # Environment variable handling
+│   │   └── index.ts          # Config exports
 │   ├── formatters/           # Output formatting
-│   │   ├── search-formatter.ts
 │   │   ├── episodes-formatter.ts
-│   │   └── info-formatter.ts
+│   │   ├── info-formatter.ts
+│   │   └── search-formatter.ts
 │   ├── utils/                # Shared utilities
 │   │   ├── errors.ts         # Error handling
 │   │   ├── format.ts         # Text formatting
 │   │   ├── language.ts       # Language code utilities
 │   │   └── validation.ts     # Input validation
-│   ├── config/               # Configuration management
-│   │   └── env-config.ts     # Environment variable handling
-│   ├── index.ts              # CLI entry point
-│   ├── parser.ts             # RSS feed parser
 │   ├── downloader.ts         # Episode downloader
-│   ├── metadata.ts           # ID3 metadata embedding
 │   ├── filter.ts             # Episode filtering
+│   ├── index.ts              # CLI entry point
+│   ├── metadata.ts           # ID3 metadata embedding
+│   ├── parser.ts             # RSS feed parser
+│   ├── types.ts              # Shared type definitions
 │   └── utils.ts              # Utility functions (legacy)
 ├── tests/                    # Jest test suite
-│   ├── commands/             # Command tests
-│   ├── formatters/           # Formatter tests
-│   └── utils/                # Utility tests
+│   ├── integration/          # Integration tests
+│   │   ├── commands/         # Command integration tests
+│   │   ├── podcast-index.test.ts
+│   │   └── setup.ts
+│   └── unit/                 # Unit tests
+│       ├── commands/         # Command unit tests
+│       ├── formatters/       # Formatter tests
+│       ├── utils/            # Utility tests
+│       └── setup.ts
 ├── docs/                     # Documentation
-│   ├── requirements/         # Feature requirements
+│   ├── features/             # Feature documentation
+│   │   ├── API_CLIENTS.md
+│   │   ├── CONFIGURATION.md
+│   │   └── PODCAST_INDEX_API.md
 │   ├── implementation/       # Implementation plans
-│   ├── PODCAST_INDEX_API.md  # Podcast Index API reference
-│   └── API_CLIENTS.md        # Client architecture guide
+│   ├── requirements/         # Feature requirements
+│   └── testing/              # Testing documentation
 ├── examples/                 # Usage examples
 │   └── podcast-index-example.ts
+├── scripts/                  # Development scripts
+│   ├── git-hooks/
+│   └── install-hooks.sh
 └── dist/                     # Compiled JavaScript
 ```
 
