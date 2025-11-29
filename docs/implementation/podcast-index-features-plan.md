@@ -12,7 +12,7 @@ This document outlines the implementation plan for adding five new CLI features 
 | FEAT-002   | Episodes     | High     | Medium     | 3-4 days         | ✅ Complete |
 | FEAT-003   | Info         | Medium   | Low        | 2-3 days         | ✅ Complete |
 | FEAT-004   | Favorite     | Medium   | Medium     | 3-4 days         | ✅ Complete |
-| FEAT-005   | Recent       | Medium   | High       | 4-5 days         | Pending |
+| FEAT-005   | Recent       | Medium   | High       | 4-5 days         | ✅ Complete |
 
 **Total Estimated Effort:** 14-19 days
 
@@ -189,9 +189,12 @@ This document outlines the implementation plan for adding five new CLI features 
 
 ---
 
-### Phase 5: Aggregate View (FEAT-005)
+### Phase 5: Aggregate View (FEAT-005) ✅
 **Feature:** Recent Command
 **Duration:** 4-5 days
+**Status:** Complete
+
+> **Implementation Note:** Phase 5 completed successfully. The recent command is now available with support for viewing recent episodes across all favorites, parallel API fetching with rate limiting, date filtering by days, per-feed filtering, and partial failure handling. All deliverables have been implemented and tested.
 
 #### Rationale
 - **Highest complexity**: Requires parallel API calls, error handling, aggregation
@@ -223,10 +226,12 @@ This document outlines the implementation plan for adding five new CLI features 
 12. Update documentation
 
 #### Deliverables
-- `src/commands/recent.ts` - Recent command implementation
-- `src/formatters/recent-formatter.ts` - Recent episodes formatting
-- `tests/commands/recent.test.ts` - Tests
-- Updated `README.md` with recent examples
+- ✅ `src/commands/recent.ts` - Recent command implementation
+- ✅ `src/formatters/recent-formatter.ts` - Recent episodes formatting
+- ✅ `tests/unit/commands/recent.test.ts` - Unit tests
+- ✅ `tests/unit/formatters/recent-formatter.test.ts` - Formatter tests
+- ✅ `tests/integration/commands/recent.test.ts` - Integration tests
+- ✅ Updated `README.md` with recent examples
 
 ---
 
@@ -384,9 +389,9 @@ Each feature must meet:
 
 ### Week 3: Convenience Features
 - ✅ **Phase 4: Favorite command (days 11-14) - COMPLETE**
-- ⏳ Phase 5: Recent command (days 15-19)
+- ✅ **Phase 5: Recent command (days 15-19) - COMPLETE**
 
-**Milestone 2:** All features complete (4 of 5 done)
+**Milestone 2:** All features complete ✅
 
 ### Week 4: Polish and Release
 - Integration testing
@@ -464,9 +469,9 @@ tests/
 ## Post-Implementation
 
 ### Documentation Updates
-- [ ] Update main README.md with all new features
-- [ ] Add examples for each command
-- [ ] Update API client documentation if needed
+- [x] Update main README.md with all new features
+- [x] Add examples for each command
+- [x] Update API client documentation if needed
 - [ ] Create changelog entry
 - [ ] Update package.json version
 
