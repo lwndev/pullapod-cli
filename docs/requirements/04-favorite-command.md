@@ -5,7 +5,7 @@
 Enable users to maintain a minimal bookmark system for frequently-checked podcast feeds to support the Recent command (FEAT-004) and provide quick access to feed URLs.
 
 ## Feature ID
-`FEAT-005`
+`FEAT-004`
 
 ## Priority
 Medium - Supporting feature for Recent command

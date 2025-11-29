@@ -11,6 +11,7 @@ import { FilterOptions } from './types';
 import { registerSearchCommand } from './commands/search';
 import { registerEpisodesCommand } from './commands/episodes';
 import { registerInfoCommand } from './commands/info';
+import { registerFavoriteCommand } from './commands/favorite';
 
 const packageJson = JSON.parse(
   readFileSync(path.join(__dirname, '../package.json'), 'utf-8')
@@ -31,6 +32,9 @@ registerEpisodesCommand(program);
 
 // Register info command
 registerInfoCommand(program);
+
+// Register favorite command
+registerFavoriteCommand(program);
 
 // Download command (default for backward compatibility)
 program

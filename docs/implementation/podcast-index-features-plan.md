@@ -138,12 +138,12 @@ This document outlines the implementation plan for adding five new CLI features 
 
 ---
 
-### Phase 4: Bookmarking System (FEAT-005)
+### Phase 4: Bookmarking System (FEAT-004)
 **Feature:** Favorite Command
 **Duration:** 3-4 days
 
 #### Rationale
-- **Prerequisite for Phase 5**: Recent command requires favorites system
+- **Prerequisite for Phase 4**: Recent command requires favorites system
 - **Moderate complexity**: Involves file I/O, JSON management, validation
 - **Foundation for convenience**: Enables power-user workflows
 - **Standalone value**: Useful for quick feed URL access
@@ -185,13 +185,13 @@ This document outlines the implementation plan for adding five new CLI features 
 
 ---
 
-### Phase 5: Aggregate View (FEAT-004)
+### Phase 5: Aggregate View (FEAT-005)
 **Feature:** Recent Command
 **Duration:** 4-5 days
 
 #### Rationale
 - **Highest complexity**: Requires parallel API calls, error handling, aggregation
-- **Depends on Phase 4**: Requires favorites system to be complete
+- **Depends on Phase 5**: Requires favorites system to be complete
 - **Premium feature**: Provides significant convenience for regular users
 - **Build last**: Can leverage all utilities and patterns from previous phases
 
@@ -225,6 +225,7 @@ This document outlines the implementation plan for adding five new CLI features 
 - Updated `README.md` with recent examples
 
 ---
+
 
 ## Shared Infrastructure
 
