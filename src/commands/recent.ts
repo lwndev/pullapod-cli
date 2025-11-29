@@ -32,6 +32,11 @@ export interface RecentOptions {
 const MAX_CONCURRENT_REQUESTS = 5;
 
 /**
+ * Delay between batches to respect API rate limits (milliseconds)
+ */
+const BATCH_DELAY_MS = 100;
+
+/**
  * Default values for options
  */
 const DEFAULT_MAX_EPISODES = 5;
@@ -49,6 +54,11 @@ const DAYS_MAX = 90;
  * Large favorites list threshold
  */
 const LARGE_FAVORITES_THRESHOLD = 20;
+
+/**
+ * Threshold for showing progress indication during fetch
+ */
+const PROGRESS_THRESHOLD = 10;
 
 /**
  * Initialize Podcast Index client
@@ -187,10 +197,12 @@ async function fetchAllFeedsWithConcurrency(
   client: PodcastIndexClient,
   feeds: FavoriteFeed[],
   maxEpisodes: number,
-  sinceTimestamp: number
+  sinceTimestamp: number,
+  showProgress = false
 ): Promise<FeedFetchResult[]> {
   const results: FeedFetchResult[] = [];
   const queue = [...feeds];
+  const totalFeeds = feeds.length;
 
   // Process feeds in batches of MAX_CONCURRENT_REQUESTS
   while (queue.length > 0) {
@@ -201,6 +213,22 @@ async function fetchAllFeedsWithConcurrency(
 
     const batchResults = await Promise.all(batchPromises);
     results.push(...batchResults);
+
+    // Show progress for large fetch operations
+    if (showProgress) {
+      const completed = results.length;
+      process.stdout.write(`\r  Progress: ${completed}/${totalFeeds} feeds fetched...`);
+    }
+
+    // Add small delay between batches to respect API rate limits
+    if (queue.length > 0) {
+      await new Promise((resolve) => setTimeout(resolve, BATCH_DELAY_MS));
+    }
+  }
+
+  // Clear progress line if shown
+  if (showProgress) {
+    process.stdout.write('\r' + ' '.repeat(50) + '\r');
   }
 
   return results;
@@ -260,13 +288,15 @@ export async function recentCommand(options: RecentOptions): Promise<void> {
     const sinceTimestamp = Math.floor(Date.now() / 1000) - days * 86400;
 
     // Fetch episodes from all feeds
+    const showProgress = feedsToFetch.length > PROGRESS_THRESHOLD;
     console.log(`Fetching recent episodes from ${feedsToFetch.length} podcast(s)...`);
 
     const results = await fetchAllFeedsWithConcurrency(
       client,
       feedsToFetch,
       maxEpisodes,
-      sinceTimestamp
+      sinceTimestamp,
+      showProgress
     );
 
     // Check if all feeds failed

@@ -89,7 +89,7 @@ describe('recent command', () => {
     // Setup mocks
     mockClient = {
       getEpisodesByFeedId: jest.fn(),
-    } as any;
+    } as jest.Mocked<Pick<PodcastIndexClient, 'getEpisodesByFeedId'>> as jest.Mocked<PodcastIndexClient>;
 
     (PodcastIndexClient as jest.MockedClass<typeof PodcastIndexClient>).mockImplementation(
       () => mockClient
@@ -351,6 +351,85 @@ describe('recent command', () => {
       expect(allLogCalls).toContain('No new episodes from your saved podcasts');
       expect(allLogCalls).toContain('pullapod recent --days 30');
       expect(processExitSpy).toHaveBeenCalledWith(0);
+    });
+  });
+
+  describe('progress indication', () => {
+    let stdoutWriteSpy: jest.SpyInstance;
+
+    beforeEach(() => {
+      stdoutWriteSpy = jest.spyOn(process.stdout, 'write').mockImplementation();
+    });
+
+    afterEach(() => {
+      stdoutWriteSpy.mockRestore();
+    });
+
+    it('should show progress when fetching more than 10 feeds', async () => {
+      // Create 12 mock feeds (above PROGRESS_THRESHOLD of 10)
+      const manyFeeds: FavoriteFeed[] = Array.from({ length: 12 }, (_, i) => ({
+        name: `Podcast ${i + 1}`,
+        url: `https://example.com/feed${i + 1}`,
+        feedId: 1000 + i,
+        dateAdded: '2024-01-10T12:00:00Z',
+      }));
+      mockFavorites.feeds = manyFeeds;
+
+      mockClient.getEpisodesByFeedId.mockResolvedValue({
+        status: 'true',
+        items: [],
+      });
+
+      await expect(recentCommand({})).rejects.toThrow('process.exit called');
+
+      // Verify progress was shown
+      const allWriteCalls = stdoutWriteSpy.mock.calls.flat().join('');
+      expect(allWriteCalls).toContain('Progress:');
+      expect(allWriteCalls).toContain('feeds fetched');
+    });
+
+    it('should not show progress when fetching 10 or fewer feeds', async () => {
+      // Create exactly 10 feeds (at PROGRESS_THRESHOLD)
+      const tenFeeds: FavoriteFeed[] = Array.from({ length: 10 }, (_, i) => ({
+        name: `Podcast ${i + 1}`,
+        url: `https://example.com/feed${i + 1}`,
+        feedId: 1000 + i,
+        dateAdded: '2024-01-10T12:00:00Z',
+      }));
+      mockFavorites.feeds = tenFeeds;
+
+      mockClient.getEpisodesByFeedId.mockResolvedValue({
+        status: 'true',
+        items: [],
+      });
+
+      await expect(recentCommand({})).rejects.toThrow('process.exit called');
+
+      // Verify progress was NOT shown
+      const allWriteCalls = stdoutWriteSpy.mock.calls.flat().join('');
+      expect(allWriteCalls).not.toContain('Progress:');
+    });
+
+    it('should not show progress when using --feed filter', async () => {
+      // Create 12 feeds but filter to just one
+      const manyFeeds: FavoriteFeed[] = Array.from({ length: 12 }, (_, i) => ({
+        name: `Podcast ${i + 1}`,
+        url: `https://example.com/feed${i + 1}`,
+        feedId: 1000 + i,
+        dateAdded: '2024-01-10T12:00:00Z',
+      }));
+      mockFavorites.feeds = manyFeeds;
+
+      mockClient.getEpisodesByFeedId.mockResolvedValue({
+        status: 'true',
+        items: [],
+      });
+
+      await expect(recentCommand({ feed: 'Podcast 1' })).rejects.toThrow('process.exit called');
+
+      // Verify progress was NOT shown (only 1 feed being fetched)
+      const allWriteCalls = stdoutWriteSpy.mock.calls.flat().join('');
+      expect(allWriteCalls).not.toContain('Progress:');
     });
   });
 });

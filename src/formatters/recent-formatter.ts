@@ -8,6 +8,12 @@ import { FavoriteFeed } from '../storage/favorites';
 import { truncateText, pluralize } from '../utils/format';
 
 /**
+ * Maximum episode title length for display.
+ * Keeps output compact while preserving readability.
+ */
+const DEFAULT_TITLE_MAX_LENGTH = 60;
+
+/**
  * Result of fetching episodes from a single feed
  */
 export interface FeedFetchResult {
@@ -43,7 +49,14 @@ export function formatShortDate(timestamp: number): string {
 }
 
 /**
- * Group episodes by podcast and sort by most recent
+ * Group episodes by podcast and sort by most recent.
+ *
+ * Filters out feeds with no episodes, sorts episodes within each group
+ * by publish date (newest first), and sorts groups by the most recent
+ * episode in each podcast.
+ *
+ * @param results - Array of fetch results from multiple feeds
+ * @returns Array of podcast groups sorted by latest episode
  */
 export function groupEpisodesByPodcast(results: FeedFetchResult[]): PodcastGroup[] {
   const groups: PodcastGroup[] = [];
@@ -72,7 +85,10 @@ export function groupEpisodesByPodcast(results: FeedFetchResult[]): PodcastGroup
  * Format a single episode line
  * Format: "  * Episode Title (Jan 15, 2024)"
  */
-export function formatEpisodeLine(episode: PodcastEpisode, maxTitleLength = 60): string {
+export function formatEpisodeLine(
+  episode: PodcastEpisode,
+  maxTitleLength = DEFAULT_TITLE_MAX_LENGTH
+): string {
   const title = truncateText(episode.title, maxTitleLength);
   const date = formatShortDate(episode.datePublished);
   return `  * ${title} (${date})`;

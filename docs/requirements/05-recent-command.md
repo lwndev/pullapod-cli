@@ -5,7 +5,7 @@
 Enable users to check recent episodes from their saved/favorite podcasts without checking each feed individually.
 
 ## Feature ID
-`FEAT-004`
+`FEAT-005`
 
 ## Priority
 Medium - Convenience feature for regular users
