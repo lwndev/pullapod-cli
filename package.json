@@ -55,11 +55,11 @@
   "homepage": "https://github.com/lwndev/pullapod-cli#readme",
   "dependencies": {
     "cli-progress": "^3.12.0",
-    "commander": "^14.0.2",
+    "commander": "^14.0.3",
     "dotenv": "^17.2.3",
     "node-id3": "^0.2.6",
     "rss-parser": "^3.13.0",
-    "sanitize-filename": "^1.6.3"
+    "sanitize-filename": "^1.6.4"
   },
   "devDependencies": {
     "@types/cli-progress": "^3.11.5",
